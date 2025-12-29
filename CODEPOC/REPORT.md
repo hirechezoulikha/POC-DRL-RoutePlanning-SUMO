@@ -100,7 +100,8 @@ Pour évaluer avec MANAGER :
     exécuter une trajectoire avec chaque agent Ai sur sa zone
     obtenir un retour Ri (et succès Si)
     choisir i* = argmax_i Ri
-    la solution MANAGER = trajectoire de Ai* "
+    la solution MANAGER = trajectoire de Ai*
+```
 
 ## 4.3 Complexité (estimation)
 À chaque décision, la simulation peut appeler `findRoute()` et/ou un reroutage.
