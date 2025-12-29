@@ -1,0 +1,4 @@
+<routes>
+    <vType id="car" vClass="passenger" />
+    <trip id="ego" type="car" depart="0" from="30029586#17" to="417998854"/>
+</routes>

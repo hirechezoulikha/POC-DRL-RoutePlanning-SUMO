@@ -1,0 +1,14 @@
+<configuration>
+    <input>
+        <net-file value="C:\Users\HIRECHE Zoulikha\Downloads\CODEPOC\data\bari.net.xml"/>
+        <route-files value=""/>
+    </input>
+    <time>
+        <begin value="0"/>
+        <end value="5000"/>
+    </time>
+    <report>
+        <verbose value="true"/>
+        <no-step-log value="true"/>
+    </report>
+</configuration>
