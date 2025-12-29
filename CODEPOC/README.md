@@ -1,100 +1,60 @@
-{
- "cells": [
-  {
-   "cell_type": "markdown",
-   "id": "2824e5c9-e36d-4676-b72e-c0fa7aa8a5f7",
-   "metadata": {},
-   "source": [
-    "# Deep Reinforcement Learning pour la planification d’itinéraire (SUMO / Bari)\n",
-    "\n",
-    "**Auteur :** HIRECHE Zoulikha  \n",
-    "**Référence principale :** Paparella et al., *A Deep Reinforcement Learning Approach for Route Planning of Autonomous Vehicles* (2024)  \n",
-    "**Simulation :** SUMO + TraCI    \n",
-    "**Données :** réseau urbain de Bari (`bari.net.xml`, `bari.sumocfg`)\n",
-    "\n",
-    "---\n",
-    "\n",
-    "## Objectif\n",
-    "Reproduire, sous forme de PoC et avec un budget d’entraînement limité, l’idée centrale de l’article :  \n",
-    "comparer une approche **globale** (un agent unique sur tout le réseau) à une approche **modulaire** (agents spécialisés par zone + mécanisme de sélection “manager”).\n",
-    "\n",
-    "---\n",
-    "\n",
-    "## Structure du dépôt\n",
-    "- `poc_bari_sumo_rl.ipynb` : notebook principal (code + exécution complète des expériences)\n",
-    "- `REPORT.md` : rapport suivant le plan demandé \n",
-    "- `data/` : fichiers SUMO  \n",
-    "  - `bari.net.xml`  \n",
-    "  - `bari.sumocfg`\n",
-    "- `outputs/` : artefacts générés (figures + tables)\n",
-    "  - `global_50k.png`\n",
-    "  - `fig5_like_modular_50k.png`\n",
-    "  - `fig7_like_table_examples.csv`\n",
-    "\n",
-    "---\n",
-    "\n",
-    "## Reproductibilité (procédure d’exécution)\n",
-    "1. Installer **SUMO** et vérifier l’accès à TraCI.\n",
-    "2. Ouvrir `poc_bari_sumo_rl.ipynb`.\n",
-    "3. Dans la **Cellule 1**, ajuster si nécessaire :\n",
-    "   - `SUMO_HOME`\n",
-    "   - `PROJECT`\n",
-    "4. Exécuter les cellules dans l’ordre (1 → 9).  \n",
-    "Les figures et tables sont automatiquement sauvegardées dans `outputs/`.\n",
-    "\n",
-    "---\n",
-    "\n",
-    "## Expériences réalisées (résumé)\n",
-    "- **Agent global** : entraînement PPO sur toutes les arêtes `passenger` du réseau.\n",
-    "- **Approche modulaire** : partition du réseau en 4 zones (quadrants) et entraînement de **4 agents** (un par zone).\n",
-    "- **Manager** : pour chaque épisode, exécute les 4 agents zonés et retient la meilleure trajectoire (meilleur retour) — approximation de la logique de sélection décrite dans l’article.\n",
-    "\n",
-    "Les résultats détaillés sont présentés dans `REPORT.md`.\n",
-    "\n",
-    "---\n",
-    "\n",
-    "## Hypothèses / écarts par rapport à l’article (PoC)\n",
-    "- **Priority edges** : absence de marquage “voies AV” dans Bari → approximation par les **10% d’arêtes les plus rapides**.\n",
-    "- **Action space** : utilisation de `rerouteTraveltime()` (SUMO) → différent de l’action “gauche/droite/tout droit” aux intersections.\n",
-    "- **Budget d’entraînement** : limité (50k timesteps) → inférieur à l’entraînement du papier.\n",
-    "- **Manager** : sélection “best return” sur des sous-réseaux zonés → à interpréter comme une approximation.\n",
-    "\n",
-    "---\n",
-    "\n",
-    "## Références\n",
-    "- Paparella et al., 2024 — *A Deep Reinforcement Learning Approach for Route Planning of Autonomous Vehicles*.\n",
-    "- Documentation SUMO / TraCI.\n",
-    "- OpenStreetMap (Bari).\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "17f920a5-e972-4800-ba12-7170fecb7e68",
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "sumo-rl",
-   "language": "python",
-   "name": "sumo-rl"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.10.19"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
-}
+# Deep Reinforcement Learning pour la planification d’itinéraire (SUMO / Bari)
+
+**Auteur :** HIRECHE Zoulikha  
+**Référence principale :** Paparella et al., *A Deep Reinforcement Learning Approach for Route Planning of Autonomous Vehicles* (2024)  
+**Simulation :** SUMO + TraCI    
+**Données :** réseau urbain de Bari (`bari.net.xml`, `bari.sumocfg`)
+
+---
+
+## Objectif
+Reproduire, sous forme de PoC et avec un budget d’entraînement limité, l’idée centrale de l’article :  
+comparer une approche **globale** (un agent unique sur tout le réseau) à une approche **modulaire** (agents spécialisés par zone + mécanisme de sélection “manager”).
+
+---
+
+## Structure du dépôt
+- `poc_bari_sumo_rl.ipynb` : notebook principal (code + exécution complète des expériences)
+- `REPORT.md` : rapport suivant le plan demandé 
+- `data/` : fichiers SUMO  
+  - `bari.net.xml`  
+  - `bari.sumocfg`
+- `outputs/` : artefacts générés (figures + tables)
+  - `global_50k.png`
+  - `fig5_like_modular_50k.png`
+  - `fig7_like_table_examples.csv`
+
+---
+
+## Reproductibilité (procédure d’exécution)
+1. Installer **SUMO** et vérifier l’accès à TraCI.
+2. Ouvrir `poc_bari_sumo_rl.ipynb`.
+3. Dans la **Cellule 1**, ajuster si nécessaire :
+   - `SUMO_HOME`
+   - `PROJECT`
+4. Exécuter les cellules dans l’ordre (1 → 9).  
+Les figures et tables sont automatiquement sauvegardées dans `outputs/`.
+
+---
+
+## Expériences réalisées (résumé)
+- **Agent global** : entraînement PPO sur toutes les arêtes `passenger` du réseau.
+- **Approche modulaire** : partition du réseau en 4 zones (quadrants) et entraînement de **4 agents** (un par zone).
+- **Manager** : pour chaque épisode, exécute les 4 agents zonés et retient la meilleure trajectoire (meilleur retour) — approximation de la logique de sélection décrite dans l’article.
+
+Les résultats détaillés sont présentés dans `REPORT.md`.
+
+---
+
+## Hypothèses / écarts par rapport à l’article (PoC)
+- **Priority edges** : absence de marquage “voies AV” dans Bari → approximation par les **10% d’arêtes les plus rapides**.
+- **Action space** : utilisation de `rerouteTraveltime()` (SUMO) → différent de l’action “gauche/droite/tout droit” aux intersections.
+- **Budget d’entraînement** : limité (50k timesteps) → inférieur à l’entraînement du papier.
+- **Manager** : sélection “best return” sur des sous-réseaux zonés → à interpréter comme une approximation.
+
+---
+
+## Références
+- Paparella et al., 2024 — *A Deep Reinforcement Learning Approach for Route Planning of Autonomous Vehicles*.
+- Documentation SUMO / TraCI.
+- OpenStreetMap (Bari).
